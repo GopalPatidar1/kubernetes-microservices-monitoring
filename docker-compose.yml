@@ -1,0 +1,65 @@
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  api-gateway-service:
+    build:
+      context: ./services/api-gateway
+    container_name: api-gateway-service
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./services/api-gateway:/app
+      - /app/node_modules
+    command: npm run dev
+
+  worker-service:
+    build:
+      context: ./services/worker
+    container_name: worker-service
+    restart: always
+    depends_on:
+      - redis
+    command: npm run dev
+    ports:
+      - "4000:4000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./services/worker:/app
+      - /app/node_modules
+
+  stats-service:
+    build:
+      context: ./services/stats
+
+    container_name: stats-service
+
+    restart: always
+
+    depends_on:
+      - redis
+
+    ports:
+      - "5000:5000"
+
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+    volumes:
+      - ./services/stats:/app
+      - /app/node_modules
+
+    command: npm run dev
