@@ -16,12 +16,11 @@ export const calculatePrimes = async (limit: number) => {
     }
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 20000)); // Simulate heavy computation
-
-  const random = Math.random() * 10;
+  const random = Math.ceil(Math.random() * 10);
   if (random % 3 == 0) {
     throw Error("Simulated error in prime calculation"); // Simulate an error
   }
+  await new Promise((resolve) => setTimeout(resolve, 20000)); // Simulate heavy computation
 
   return primes.length;
 };
