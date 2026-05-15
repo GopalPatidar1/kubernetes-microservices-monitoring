@@ -1,4 +1,3 @@
-````md
 # Kubernetes Microservices Setup Guide
 
 ## Project Overview
@@ -388,4 +387,3 @@ Pod Creation
         ↓
 Kubernetes Service Exposure
 ```
-````
